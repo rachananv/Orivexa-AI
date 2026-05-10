@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Send, Mic, Paperclip, Copy, Bookmark, Trash2, StopCircle } from 'lucide-react';
+import API_URL from '../config';
 
 const ChatInterface = () => {
   const userName = localStorage.getItem('orivexa_username') || 'bestie';
@@ -87,7 +88,7 @@ const ChatInterface = () => {
     setIsTyping(true);
 
     try {
-      const response = await fetch('http://localhost:8000/api/chat', {
+      const response = await fetch(`${API_URL}/api/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: currentInput, session_id: 'default' })
@@ -113,7 +114,7 @@ const ChatInterface = () => {
     formData.append('file', file);
 
     try {
-      const response = await fetch('http://localhost:8000/api/upload', {
+      const response = await fetch(`${API_URL}/api/upload`, {
         method: 'POST',
         body: formData,
       });

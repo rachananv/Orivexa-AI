@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { BookOpen, FileText, CheckCircle, Clock } from 'lucide-react';
+import API_URL from '../config';
 
 const Dashboard = () => {
   const [dashboardData, setDashboardData] = useState({ documents_uploaded: 0, recent_activity: [] });
@@ -8,7 +9,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchDashboard = async () => {
       try {
-        const response = await fetch('http://localhost:8000/api/dashboard');
+        const response = await fetch(`${API_URL}/api/dashboard`);
         if (response.ok) {
           const data = await response.json();
           setDashboardData(data);

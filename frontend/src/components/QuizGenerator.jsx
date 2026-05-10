@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { BrainCircuit, CheckCircle, XCircle } from 'lucide-react';
+import API_URL from '../config';
 
 const QuizGenerator = () => {
   const [quiz, setQuiz] = useState([]);
@@ -17,7 +18,7 @@ const QuizGenerator = () => {
     setQuiz([]);
 
     try {
-      const response = await fetch('http://localhost:8000/api/quiz');
+      const response = await fetch(`${API_URL}/api/quiz`);
       const data = await response.json();
       
       if (!response.ok) {

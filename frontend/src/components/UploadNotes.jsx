@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Upload, FileText, CheckCircle, AlertCircle } from 'lucide-react';
+import API_URL from '../config';
 
 const UploadNotes = () => {
   const [file, setFile] = useState(null);
@@ -28,7 +29,7 @@ const UploadNotes = () => {
     formData.append('file', file);
 
     try {
-      const response = await fetch('http://localhost:8000/api/upload', {
+      const response = await fetch(`${API_URL}/api/upload`, {
         method: 'POST',
         body: formData,
       });

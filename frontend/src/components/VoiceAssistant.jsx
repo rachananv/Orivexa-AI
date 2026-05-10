@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Mic, StopCircle, Volume2 } from 'lucide-react';
+import API_URL from '../config';
 
 const VoiceAssistant = () => {
   const [isListening, setIsListening] = useState(false);
@@ -34,7 +35,7 @@ const VoiceAssistant = () => {
         setAiResponse('Thinking...');
         
         try {
-          const response = await fetch('http://localhost:8000/api/chat', {
+          const response = await fetch(`${API_URL}/api/chat`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ message: text, session_id: 'voice' })
