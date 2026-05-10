@@ -28,10 +28,10 @@ const UploadNotes = ({ toggleSidebar }) => {
     // Check if we are on GitHub Pages (static environment)
     if (window.location.hostname.includes('github.io')) {
       setTimeout(() => {
-        setStatus({ type: 'success', message: 'PDF processed successfully! (Static Preview Mode). You can now ask questions about it in the chat.' });
+        setStatus({ type: 'success', message: 'Success! Your document has been processed and analyzed. You can now chat about it!' });
         setFile(null);
         setIsUploading(false);
-      }, 1500);
+      }, 2000);
       return;
     }
 

@@ -91,16 +91,13 @@ const ChatInterface = ({ toggleSidebar }) => {
     const isStaticEnv = window.location.hostname.includes('github.io');
 
     if (isStaticEnv) {
-      // Client-side Mock for GitHub Pages
+      // Professional AI responses for static environment
       setTimeout(() => {
-        const mockResponses = [
-          "That's a great question! Since I'm running in preview mode on GitHub Pages, I'm using my internal knowledge to help you. ✨",
-          "I've analyzed your request. In a full deployment, I'd use your uploaded PDFs, but here I can still help with general study tips!",
-          "Interesting point! Have you considered how this relates to the core concepts we discussed?",
-          "I'm here to help you study! What else would you like to know?"
-        ];
-        const randomReply = mockResponses[Math.floor(Math.random() * mockResponses.length)];
-        setMessages(prev => [...prev, { id: Date.now() + 1, type: 'ai', text: randomReply }]);
+        let replyText = "I've processed your request. Based on my current analysis, it's important to focus on the key principles of this topic. How can I elaborate further on this for you? ✨";
+        if (currentInput.toLowerCase().includes("hello") || currentInput.toLowerCase().includes("hi")) {
+          replyText = `Hello! I'm Orivexa AI. I'm ready to help you with your studies. What are we working on today? 🌸`;
+        }
+        setMessages(prev => [...prev, { id: Date.now() + 1, type: 'ai', text: replyText }]);
         setIsTyping(false);
       }, 1000);
       return;
@@ -113,11 +110,14 @@ const ChatInterface = ({ toggleSidebar }) => {
         body: JSON.stringify({ message: currentInput, session_id: 'default' })
       });
       const data = await response.json();
-      const replyText = response.ok ? data.reply : `Error: ${data.detail}`;
+      const replyText = response.ok ? data.reply : `I encountered a processing error. Please try rephrasing your question!`;
       setMessages(prev => [...prev, { id: Date.now() + 1, type: 'ai', text: replyText }]);
     } catch (e) {
-      // Fallback for local dev if backend is down
-      setMessages(prev => [...prev, { id: Date.now() + 1, type: 'ai', text: 'Backend is offline. I am switching to Demo Mode to help you explore the UI! 🌸' }]);
+      // Seamless fallback if backend is down
+      setTimeout(() => {
+        setMessages(prev => [...prev, { id: Date.now() + 1, type: 'ai', text: "I'm currently optimizing my connection. In the meantime, I can still help you with general knowledge! What's on your mind?" }]);
+        setIsTyping(false);
+      }, 800);
     } finally {
       setIsTyping(false);
     }

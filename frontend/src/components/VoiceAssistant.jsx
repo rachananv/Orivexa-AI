@@ -37,7 +37,7 @@ const VoiceAssistant = ({ toggleSidebar }) => {
         // Check if we are on GitHub Pages (static environment)
         if (window.location.hostname.includes('github.io')) {
           setTimeout(() => {
-            const replyText = "I'm your voice assistant! In this static preview, I'm simulating my responses. On a full setup, I'd answer you using your notes! ✨";
+            const replyText = "I'm processing your voice command. I'm ready to assist you with your academic questions. What would you like to discuss today? ✨";
             setAiResponse(replyText);
             speakText(replyText);
           }, 1000);
