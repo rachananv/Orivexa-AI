@@ -1,0 +1,13 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #8b5cf6;
+  --color-secondary: #ec4899;
+  --color-tertiary: #3b82f6;
+}
+
+@layer base {
+  body {
+    @apply bg-slate-900 text-slate-100;
+  }
+}
