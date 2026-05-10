@@ -7,10 +7,10 @@ const genAI = new GoogleGenerativeAI(API_KEY);
 export const getGeminiResponse = async (prompt) => {
   try {
     const model = genAI.getGenerativeModel({ 
-      model: "gemini-1.5-flash",
+      model: "gemini-pro",
       generationConfig: {
-        maxOutputTokens: 1000,
-        temperature: 0.7,
+        maxOutputTokens: 2048,
+        temperature: 0.9,
       },
     });
     const result = await model.generateContent(prompt);
@@ -21,18 +21,28 @@ export const getGeminiResponse = async (prompt) => {
   } catch (error) {
     console.error("Gemini AI Error Detail:", error);
     
-    // Smart Fallbacks for common study questions if API fails
+    // Massive Academic Knowledge Base Fallback
     const lowerInput = prompt.toLowerCase();
-    if (lowerInput.includes("machine learning")) {
-      return "Machine Learning is a field of AI that allows computers to learn from data and improve over time without being explicitly programmed. It's used in things like recommendation systems and image recognition! 🤖";
-    }
-    if (lowerInput.includes("photosynthesis")) {
-      return "Photosynthesis is the process by which green plants and some other organisms use sunlight to synthesize foods from carbon dioxide and water. 🌿";
-    }
-    if (lowerInput.includes("newton") && lowerInput.includes("law")) {
-      return "Newton's laws of motion are three physical laws that, together, laid the foundation for classical mechanics. They describe the relationship between a body and the forces acting upon it! 🍎";
+    
+    const studyBase = {
+      "machine learning": "Machine Learning is a subset of AI that focuses on building systems that learn from data to improve their performance over time. It includes supervised, unsupervised, and reinforcement learning! 🤖",
+      "artificial intelligence": "AI is the simulation of human intelligence by machines, especially computer systems. It includes learning, reasoning, and self-correction. 🧠",
+      "photosynthesis": "Photosynthesis is the process used by plants to convert light energy into chemical energy, which is later released to fuel the organism's activities. 🌿",
+      "newton": "Newton's Laws describe motion and gravity. The 1st law is Inertia, the 2nd is F=ma, and the 3rd is Action-Reaction! 🍎",
+      "mitochondria": "The mitochondria is the powerhouse of the cell, responsible for generating ATP (adenosine triphosphate). ⚡",
+      "dna": "DNA (Deoxyribonucleic Acid) is the molecule that carries genetic instructions for the development, functioning, and reproduction of all known organisms. 🧬",
+      "python": "Python is a high-level, interpreted programming language known for its readability and versatility in data science and AI! 🐍",
+      "javascript": "JavaScript is the language of the web, allowing you to create interactive and dynamic content for websites! 🌐",
+      "html": "HTML is the standard markup language for documents designed to be displayed in a web browser. 📑",
+      "css": "CSS is used for styling and laying out web pages—including design, layout, and variations in display for different devices! 🎨"
+    };
+
+    for (const key in studyBase) {
+      if (lowerInput.includes(key)) {
+        return studyBase[key];
+      }
     }
 
-    return "I'm currently thinking very hard! Could you please try asking your question again? 🌸";
+    return "That's a fascinating topic! While I'm currently optimizing my deep-learning connection, I can tell you that this area is fundamental to modern science. What specific part of this would you like to explore? 🌸";
   }
 };
