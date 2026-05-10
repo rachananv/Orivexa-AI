@@ -44,7 +44,10 @@ export const getGeminiResponse = async (prompt) => {
       return "Physics is the study of matter and energy. Newton's laws are fundamental here: everything from why an apple falls to how planets move is governed by these principles! 🍎🔭";
     }
 
-    if (/\b(python|javascript|code|coding|programming)\b/.test(lowerInput)) {
+    if (/\b(python|javascript|code|coding|programming|data science)\b/.test(lowerInput)) {
+      if (lowerInput.includes("data science")) {
+        return "**Data Science** is an interdisciplinary field that uses scientific methods, processes, algorithms, and systems to extract knowledge and insights from noisy, structured, and unstructured data. It combines math, statistics, and programming! 📊💡";
+      }
       return "Programming is the language of the future! Whether it's **Python** for data science or **JavaScript** for web development, learning to code allows you to build anything you can imagine. 💻🚀";
     }
 

@@ -9,7 +9,7 @@ import remarkGfm from 'remark-gfm';
 const ChatInterface = ({ toggleSidebar }) => {
   const userName = localStorage.getItem('orivexa_username') || 'bestie';
   const [messages, setMessages] = useState([
-    { id: 1, type: 'ai', text: `Hi ${userName} 🌸 Ready to study smarter today? Upload some notes or ask me anything!` }
+    { id: 1, type: 'ai', text: `Hello! I am **Orivexa AI Pro**. I'm here to help you master your academic goals. What are we studying today? 🌸` }
   ]);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
@@ -187,7 +187,7 @@ const ChatInterface = ({ toggleSidebar }) => {
           </button>
           <div className="flex flex-col">
             <h1 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400 flex items-center">
-              Orivexa AI <span className="ml-2 text-[10px] px-1.5 py-0.5 rounded-full bg-purple-500/20 text-purple-400 border border-purple-500/20 uppercase tracking-widest font-bold">v2.1</span>
+              Orivexa AI Pro <span className="ml-2 text-[10px] px-1.5 py-0.5 rounded-full bg-purple-500/20 text-purple-400 border border-purple-500/20 uppercase tracking-widest font-bold">v3.0</span>
             </h1>
             <p className="text-xs text-slate-500 font-medium hidden sm:block">Advanced Study Assistant</p>
           </div>
