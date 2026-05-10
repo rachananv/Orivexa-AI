@@ -1,9 +1,9 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { MessageSquare, LayoutDashboard, FileUp, Bookmark, Mic, Settings, Moon, Sun, Info, Sparkles, BrainCircuit } from 'lucide-react';
+import { MessageSquare, LayoutDashboard, FileUp, Bookmark, Mic, Settings, Moon, Sun, Info, Sparkles, BrainCircuit, X } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-const Sidebar = ({ isDarkMode, toggleDarkMode }) => {
+const Sidebar = ({ isDarkMode, toggleDarkMode, isOpen, setIsOpen }) => {
   const navItems = [
     { icon: <MessageSquare size={20} />, label: 'New Chat', path: '/app/chat' },
     { icon: <LayoutDashboard size={20} />, label: 'Dashboard', path: '/app/dashboard' },
@@ -15,25 +15,38 @@ const Sidebar = ({ isDarkMode, toggleDarkMode }) => {
 
   return (
     <motion.div 
-      initial={{ x: -250 }}
-      animate={{ x: 0 }}
-      className={`w-64 h-full flex flex-col border-r backdrop-blur-xl ${isDarkMode ? 'bg-slate-900/50 border-slate-700' : 'bg-white/50 border-slate-200'} z-20`}
+      initial={false}
+      animate={{ 
+        x: isOpen ? 0 : -260,
+        width: isOpen ? 260 : 0
+      }}
+      transition={{ type: 'spring', damping: 20, stiffness: 100 }}
+      className={`fixed md:relative h-full flex flex-col border-r backdrop-blur-xl ${isDarkMode ? 'bg-slate-900/80 border-slate-700' : 'bg-white/80 border-slate-200'} z-30 md:translate-x-0 md:w-64`}
+      style={{ x: window.innerWidth >= 768 ? 0 : undefined, width: window.innerWidth >= 768 ? 256 : undefined }}
     >
-      <div className="mb-10 flex items-center justify-center space-x-3 mt-6">
-        <div className="p-3 bg-gradient-to-tr from-purple-500 to-pink-500 rounded-2xl shadow-lg">
-          <span className="text-white font-bold text-2xl">O</span>
+      <div className="mb-10 flex items-center justify-between px-6 mt-6">
+        <div className="flex items-center space-x-3">
+          <div className="p-3 bg-gradient-to-tr from-purple-500 to-pink-500 rounded-2xl shadow-lg">
+            <span className="text-white font-bold text-2xl">O</span>
+          </div>
+          <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-500 to-pink-500 text-transparent bg-clip-text">
+            Orivexa AI
+          </h1>
         </div>
-        <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-500 to-pink-500 text-transparent bg-clip-text">
-          Orivexa AI
-        </h1>
+        <button 
+          onClick={() => setIsOpen(false)}
+          className="md:hidden p-2 text-slate-400 hover:text-slate-200"
+        >
+          <X size={20} />
+        </button>
       </div>
 
-      <nav className="flex-1 px-4 space-y-2 mt-4">
+      <nav className="flex-1 px-4 space-y-2 mt-4 overflow-y-auto">
         {navItems.map((item, idx) => (
           <NavLink
             key={idx}
             to={item.path}
-            end={item.path === '/app'}
+            onClick={() => window.innerWidth < 768 && setIsOpen(false)}
             className={({ isActive }) => `
               flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-300
               ${isActive 
@@ -42,7 +55,7 @@ const Sidebar = ({ isDarkMode, toggleDarkMode }) => {
             `}
           >
             {item.icon}
-            <span>{item.label}</span>
+            <span className="whitespace-nowrap">{item.label}</span>
           </NavLink>
         ))}
       </nav>

@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Send, Mic, Paperclip, Copy, Bookmark, Trash2, StopCircle } from 'lucide-react';
+import { Send, Mic, Paperclip, Copy, Bookmark, Trash2, StopCircle, Menu } from 'lucide-react';
 import API_URL from '../config';
 
-const ChatInterface = () => {
+const ChatInterface = ({ toggleSidebar }) => {
   const userName = localStorage.getItem('orivexa_username') || 'bestie';
   const [messages, setMessages] = useState([
     { id: 1, type: 'ai', text: `Hi ${userName} 🌸 Ready to study smarter today? Upload some notes or ask me anything!` }
@@ -140,12 +140,19 @@ const ChatInterface = () => {
   return (
     <div className="flex flex-col h-full bg-transparent">
       {/* Header */}
-      <header className="h-16 border-b border-slate-200 dark:border-slate-700/50 backdrop-blur-md flex items-center justify-between px-6 z-10">
-        <div className="flex items-center space-x-2">
+      <header className="h-16 border-b border-slate-200 dark:border-slate-700/50 backdrop-blur-md flex items-center justify-between px-4 md:px-6 z-10">
+        <div className="flex items-center space-x-3">
+          <button 
+            onClick={toggleSidebar}
+            className="p-2 md:hidden text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 transition-colors"
+          >
+            <Menu size={24} />
+          </button>
           <span className="relative flex h-3 w-3">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
             <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
           </span>
+          <span className="text-sm font-medium text-slate-500 dark:text-slate-400 hidden sm:inline">Orivexa AI is online</span>
         </div>
         <div className="flex space-x-3">
           <button onClick={() => setMessages([{ id: 1, type: 'ai', text: 'Chat cleared! How can I help?' }])} className="p-2 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 transition-colors tooltip" title="Clear Chat">
@@ -171,7 +178,7 @@ const ChatInterface = () => {
               animate={{ opacity: 1, y: 0 }}
               className={`flex ${msg.type === 'user' ? 'justify-end' : 'justify-start'}`}
             >
-              <div className={`max-w-[70%] flex flex-col space-y-1 ${msg.type === 'user' ? 'items-end' : 'items-start'}`}>
+              <div className={`max-w-[85%] md:max-w-[70%] flex flex-col space-y-1 ${msg.type === 'user' ? 'items-end' : 'items-start'}`}>
                 <div className={`px-5 py-3 rounded-2xl shadow-sm ${
                   msg.type === 'user' 
                     ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-br-none' 

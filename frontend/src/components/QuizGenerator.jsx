@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { BrainCircuit, CheckCircle, XCircle } from 'lucide-react';
+import { BrainCircuit, CheckCircle, XCircle, Menu } from 'lucide-react';
 import API_URL from '../config';
 
-const QuizGenerator = () => {
+const QuizGenerator = ({ toggleSidebar }) => {
   const [quiz, setQuiz] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [answers, setAnswers] = useState({});
@@ -51,7 +51,19 @@ const QuizGenerator = () => {
   };
 
   return (
-    <div className="flex-1 p-8 overflow-y-auto">
+    <div className="flex-1 overflow-y-auto">
+      {/* Mobile Header */}
+      <header className="h-16 md:hidden border-b border-slate-200 dark:border-slate-700/50 backdrop-blur-md flex items-center px-4 z-10 sticky top-0">
+        <button 
+          onClick={toggleSidebar}
+          className="p-2 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 transition-colors"
+        >
+          <Menu size={24} />
+        </button>
+        <span className="ml-3 font-bold text-lg">Quiz Generator</span>
+      </header>
+
+      <div className="p-8">
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

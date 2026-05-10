@@ -13,6 +13,7 @@ import './App.css';
 
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   // Simple study hours tracker
   useEffect(() => {
@@ -23,24 +24,40 @@ function App() {
     return () => clearInterval(interval);
   }, []);
 
+  const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
+
   return (
     <Router basename={import.meta.env.BASE_URL}>
       <div className={`min-h-screen ${isDarkMode ? 'dark bg-slate-900 text-white' : 'bg-slate-50 text-slate-900'} font-sans overflow-hidden transition-colors duration-300`}>
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/app/*" element={
-            <div className="flex h-screen overflow-hidden">
-              <Sidebar isDarkMode={isDarkMode} toggleDarkMode={() => setIsDarkMode(!isDarkMode)} />
-              <div className="flex-1 flex flex-col h-full relative z-10 overflow-hidden">
+            <div className="flex h-screen overflow-hidden relative">
+              {/* Overlay for mobile when sidebar is open */}
+              {isSidebarOpen && (
+                <div 
+                  className="fixed inset-0 bg-black/50 z-20 md:hidden backdrop-blur-sm"
+                  onClick={() => setIsSidebarOpen(false)}
+                />
+              )}
+              
+              <Sidebar 
+                isDarkMode={isDarkMode} 
+                toggleDarkMode={() => setIsDarkMode(!isDarkMode)} 
+                isOpen={isSidebarOpen}
+                setIsOpen={setIsSidebarOpen}
+              />
+              
+              <div className="flex-1 flex flex-col h-full relative z-10 overflow-hidden w-full">
                 <Routes>
                   <Route path="/" element={<Navigate to="/app/chat" replace />} />
-                  <Route path="/chat" element={<ChatInterface />} />
-                  <Route path="/dashboard" element={<Dashboard />} />
-                  <Route path="/upload" element={<UploadNotes />} />
-                  <Route path="/quiz" element={<QuizGenerator />} />
-                  <Route path="/saved" element={<SavedChats />} />
-                  <Route path="/voice" element={<VoiceAssistant />} />
-                  <Route path="/settings" element={<Settings />} />
+                  <Route path="/chat" element={<ChatInterface toggleSidebar={toggleSidebar} />} />
+                  <Route path="/dashboard" element={<Dashboard toggleSidebar={toggleSidebar} />} />
+                  <Route path="/upload" element={<UploadNotes toggleSidebar={toggleSidebar} />} />
+                  <Route path="/quiz" element={<QuizGenerator toggleSidebar={toggleSidebar} />} />
+                  <Route path="/saved" element={<SavedChats toggleSidebar={toggleSidebar} />} />
+                  <Route path="/voice" element={<VoiceAssistant toggleSidebar={toggleSidebar} />} />
+                  <Route path="/settings" element={<Settings toggleSidebar={toggleSidebar} />} />
                   <Route path="*" element={<Navigate to="/app/chat" replace />} />
                 </Routes>
               </div>

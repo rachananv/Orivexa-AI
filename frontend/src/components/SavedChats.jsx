@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { MessageSquare, Trash2, ArrowRight } from 'lucide-react';
+import { MessageSquare, Trash2, ArrowRight, Menu } from 'lucide-react';
 
-const SavedChats = () => {
+const SavedChats = ({ toggleSidebar }) => {
   const [savedSessions, setSavedSessions] = useState([]);
 
   useEffect(() => {
@@ -17,7 +17,19 @@ const SavedChats = () => {
   };
 
   return (
-    <div className="flex-1 p-8 overflow-y-auto">
+    <div className="flex-1 overflow-y-auto">
+      {/* Mobile Header */}
+      <header className="h-16 md:hidden border-b border-slate-200 dark:border-slate-700/50 backdrop-blur-md flex items-center px-4 z-10 sticky top-0">
+        <button 
+          onClick={toggleSidebar}
+          className="p-2 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 transition-colors"
+        >
+          <Menu size={24} />
+        </button>
+        <span className="ml-3 font-bold text-lg">Saved Chats</span>
+      </header>
+
+      <div className="p-8">
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
