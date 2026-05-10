@@ -24,6 +24,11 @@ function App() {
     return () => clearInterval(interval);
   }, []);
 
+  const resetChat = () => {
+    setChatKey(prev => prev + 1);
+    setIsSidebarOpen(false);
+  };
+
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
   return (
@@ -46,18 +51,19 @@ function App() {
                 toggleDarkMode={() => setIsDarkMode(!isDarkMode)} 
                 isOpen={isSidebarOpen}
                 setIsOpen={setIsSidebarOpen}
+                resetChat={resetChat}
               />
               
               <div className="flex-1 flex flex-col h-full relative z-10 overflow-hidden w-full min-w-0">
                 <Routes>
                   <Route path="/" element={<Navigate to="/app/chat" replace />} />
-                  <Route path="/chat" element={<ChatInterface toggleSidebar={toggleSidebar} />} />
-                  <Route path="/dashboard" element={<Dashboard toggleSidebar={toggleSidebar} />} />
-                  <Route path="/upload" element={<UploadNotes toggleSidebar={toggleSidebar} />} />
-                  <Route path="/quiz" element={<QuizGenerator toggleSidebar={toggleSidebar} />} />
-                  <Route path="/saved" element={<SavedChats toggleSidebar={toggleSidebar} />} />
-                  <Route path="/voice" element={<VoiceAssistant toggleSidebar={toggleSidebar} />} />
-                  <Route path="/settings" element={<Settings toggleSidebar={toggleSidebar} />} />
+                  <Route path="/chat" element={<ChatInterface key={chatKey} toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />} />
+                  <Route path="/dashboard" element={<Dashboard toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />} />
+                  <Route path="/upload" element={<UploadNotes toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />} />
+                  <Route path="/quiz" element={<QuizGenerator toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />} />
+                  <Route path="/saved" element={<SavedChats toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />} />
+                  <Route path="/voice" element={<VoiceAssistant toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />} />
+                  <Route path="/settings" element={<Settings toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />} />
                   <Route path="*" element={<Navigate to="/app/chat" replace />} />
                 </Routes>
               </div>

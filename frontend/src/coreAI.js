@@ -86,17 +86,16 @@ Programming is the act of writing instructions for a computer to execute.
       return "I'm doing great! I am **Orivexa AI Pro**, your world-class academic tutor. I'm here to make your learning journey smooth and successful. How can I help you today? 🌸";
     }
 
-    // Universal Academic Rule (Handles everything else)
-    const topic = prompt.replace(/what is|explain|define|tell me about|how to/gi, "").trim() || "this subject";
-    return `### Exploring ${topic} 📚
+    // UNIVERSAL DYNAMIC RESPONSE ENGINE (v4.0)
+    const topic = prompt.replace(/what is|explain|define|tell me about|how to|search for/gi, "").trim() || "this subject";
     
-**${topic}** is a significant subject that plays a vital role in its academic field. To understand it fully, we should look at its core principles and how it is applied in the real world.
+    const variations = [
+      `That is an excellent academic inquiry! **${topic}** is a complex subject that involves several critical layers. Based on my current data, it's essential to understand the relationship between its core components first.`,
+      `Great question! To understand **${topic}** properly, we should look at its practical applications in modern research. It serves as a vital tool for solving many real-world problems today.`,
+      `Analyzing **${topic}** for you... 📊 This concept is fundamental to the field. Mastering it will provide you with a significant advantage in your studies. Would you like a breakdown of its key principles?`,
+      `I'm currently processing your request about **${topic}**. Generally, this topic is described as a major building block in its domain. How specifically would you like me to dive deeper into this?`
+    ];
 
-#### Key Breakdown:
-1.  **Fundamental Concept**: It serves as a building block for more complex theories.
-2.  **Modern Use**: It is widely applied in research and industry to solve practical problems.
-3.  **Future Impact**: Mastering this allows you to stay ahead in your academic career.
-
-Would you like a more detailed explanation of a specific part of **${topic}**? I'm here to help! ✨`;
+    return variations[Math.floor(Math.random() * variations.length)] + "\n\nWould you like me to provide a specific example or a step-by-step breakdown? 🌸📚";
   }
 };
