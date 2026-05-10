@@ -7,7 +7,7 @@ const genAI = new GoogleGenerativeAI(API_KEY);
 export const getGeminiResponse = async (prompt) => {
   try {
     const model = genAI.getGenerativeModel({ 
-      model: "gemini-pro",
+      model: "gemini-1.5-flash",
       systemInstruction: "You are Orivexa AI, a world-class academic tutor. Provide structured, detailed, and helpful study assistance. Use Markdown for formatting (bold, lists, code blocks, etc.). Be clear and encouraging like a friendly professor.",
       generationConfig: {
         maxOutputTokens: 2048,
@@ -26,6 +26,9 @@ export const getGeminiResponse = async (prompt) => {
     const lowerInput = prompt.toLowerCase();
     
     const studyBase = {
+      "hi": "Hello! I'm Orivexa AI, your dedicated academic tutor. How can I assist you with your studies today? 🌸",
+      "hello": "Hi there! Ready to dive into some learning? What topic can I help you explore right now? ✨",
+      "hey": "Hey! I'm here and ready to help. What's on your study list for today? 📚",
       "machine learning": "Machine Learning is a subset of AI that focuses on building systems that learn from data to improve their performance over time. It includes supervised, unsupervised, and reinforcement learning! 🤖",
       "artificial intelligence": "AI is the simulation of human intelligence by machines, especially computer systems. It includes learning, reasoning, and self-correction. 🧠",
       "photosynthesis": "Photosynthesis is the process used by plants to convert light energy into chemical energy, which is later released to fuel the organism's activities. 🌿",
