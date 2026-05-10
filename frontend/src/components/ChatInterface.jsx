@@ -187,7 +187,7 @@ const ChatInterface = ({ toggleSidebar }) => {
           </button>
           <div className="flex flex-col">
             <h1 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400 flex items-center">
-              Orivexa AI <span className="ml-2 text-[10px] px-1.5 py-0.5 rounded-full bg-purple-500/20 text-purple-400 border border-purple-500/20 uppercase tracking-widest font-bold">v2.0</span>
+              Orivexa AI <span className="ml-2 text-[10px] px-1.5 py-0.5 rounded-full bg-purple-500/20 text-purple-400 border border-purple-500/20 uppercase tracking-widest font-bold">v2.1</span>
             </h1>
             <p className="text-xs text-slate-500 font-medium hidden sm:block">Advanced Study Assistant</p>
           </div>
