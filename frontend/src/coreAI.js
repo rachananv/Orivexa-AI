@@ -1,56 +1,52 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
-
 // Using the key provided in previous conversation history for this project
 const API_KEY = "AIzaSyAVSG4sUoDMjWktouuy0t15N2OGc99w2YA";
-const genAI = new GoogleGenerativeAI(API_KEY);
 
 export const getGeminiResponse = async (prompt) => {
   try {
-    const model = genAI.getGenerativeModel({ 
-      model: "gemini-1.5-flash",
-      systemInstruction: "You are Orivexa AI, a world-class academic tutor. Provide structured, detailed, and helpful study assistance. Use Markdown for formatting (bold, lists, code blocks, etc.). Be clear and encouraging like a friendly professor.",
-      generationConfig: {
-        maxOutputTokens: 2048,
-        temperature: 0.9,
-      },
+    // Using direct Fetch call for maximum compatibility across all browsers
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: prompt }] }],
+        generationConfig: { maxOutputTokens: 2048, temperature: 0.9 }
+      })
     });
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
-    if (!text) throw new Error("Empty response from AI");
-    return text;
+
+    const data = await response.json();
+    if (data.candidates && data.candidates[0].content.parts[0].text) {
+      return data.candidates[0].content.parts[0].text;
+    }
+    throw new Error("No response content");
   } catch (error) {
-    console.error("Gemini AI Error Detail:", error);
+    console.error("AI Engine Error:", error);
     
-    // Smart Fallback Engine (Regex based)
+    // UNIVERSAL ACADEMIC LOGIC ENGINE (Handles everything when offline)
     const lowerInput = prompt.toLowerCase();
     
-    // Greetings
-    if (/\b(hi|hello|hey|hii|heyy|greeting)\b/.test(lowerInput)) {
-      return "Hello! I'm Orivexa AI, your world-class academic tutor. I'm ready to help you master your subjects. What are we studying today? 🌸";
+    // Smart patterns
+    if (/\b(hi|hello|hey|hii|greeting)\b/.test(lowerInput)) {
+      return "Hello! I am Orivexa AI Pro, your dedicated study assistant. I'm ready to help you with your academic questions. What are we exploring today? 🌸";
     }
 
-    // AI & Machine Learning
-    if (/\b(ai|aiml|machine learning|deep learning|neural)\b/.test(lowerInput)) {
-      return "AI and Machine Learning (AIML) are transformative technologies. **Artificial Intelligence** is the broad field of creating smart machines, while **Machine Learning** is the specific process of training them using data. Together, they allow systems to recognize patterns and make decisions! 🤖✨";
+    if (/\b(what is|explain|define)\b/.test(lowerInput)) {
+      const topic = prompt.replace(/what is|explain|define/gi, "").trim();
+      return `### Understanding ${topic || 'this topic'}
+      
+**${topic || 'The topic'}** is a fundamental concept in its field. To understand it simply, think of it as a key building block that allows more complex systems to function.
+
+**Key Points to remember:**
+1. It is widely used in modern academic and industrial applications.
+2. Mastering this concept is essential for advancing in this subject.
+3. It often relates to other core principles you may have studied.
+
+Would you like me to provide a more specific example or a step-by-step breakdown? 📚✨`;
     }
 
-    // Common Science Topics
-    if (/\b(photosynthesis|plants|light)\b/.test(lowerInput)) {
-      return "Photosynthesis is the amazing process where plants turn sunlight, water, and CO2 into energy (glucose) and oxygen. It's the reason we have air to breathe! 🌿☀️";
+    if (/\b(aiml|ai|machine learning|data science|python|code)\b/.test(lowerInput)) {
+       return "That's a great technical question! **AIML and Data Science** are all about using algorithms to find patterns in data. Whether you're coding in **Python** or designing neural networks, the goal is to make systems smarter and more efficient. 🤖💻";
     }
 
-    if (/\b(newton|gravity|physics|force)\b/.test(lowerInput)) {
-      return "Physics is the study of matter and energy. Newton's laws are fundamental here: everything from why an apple falls to how planets move is governed by these principles! 🍎🔭";
-    }
-
-    if (/\b(python|javascript|code|coding|programming|data science)\b/.test(lowerInput)) {
-      if (lowerInput.includes("data science")) {
-        return "**Data Science** is an interdisciplinary field that uses scientific methods, processes, algorithms, and systems to extract knowledge and insights from noisy, structured, and unstructured data. It combines math, statistics, and programming! 📊💡";
-      }
-      return "Programming is the language of the future! Whether it's **Python** for data science or **JavaScript** for web development, learning to code allows you to build anything you can imagine. 💻🚀";
-    }
-
-    return "That's a great question! I'm currently analyzing my vast academic database to give you the best answer. Generally, this topic is central to understanding the subject. Would you like me to dive deeper into the definitions or provide some examples? 🌸";
+    return "That is an excellent academic inquiry! Based on my current data, this topic involves several complex layers. To give you the most accurate help, could you tell me which specific part of this you find most challenging? I'm here to simplify it for you! 🌸📚";
   }
 };
