@@ -17,12 +17,11 @@ const Sidebar = ({ isDarkMode, toggleDarkMode, isOpen, setIsOpen }) => {
     <motion.div 
       initial={false}
       animate={{ 
-        x: isOpen ? 0 : -260,
-        width: isOpen ? 260 : 0
+        x: window.innerWidth >= 768 ? 0 : (isOpen ? 0 : -260),
+        width: window.innerWidth >= 768 ? 260 : (isOpen ? 260 : 0)
       }}
       transition={{ type: 'spring', damping: 20, stiffness: 100 }}
-      className={`fixed md:relative h-full flex flex-col border-r backdrop-blur-xl ${isDarkMode ? 'bg-slate-900/80 border-slate-700' : 'bg-white/80 border-slate-200'} z-30 md:translate-x-0 md:w-64`}
-      style={{ x: window.innerWidth >= 768 ? 0 : undefined, width: window.innerWidth >= 768 ? 256 : undefined }}
+      className={`fixed md:relative h-full flex flex-col border-r backdrop-blur-xl ${isDarkMode ? 'bg-slate-900/80 border-slate-700' : 'bg-white/80 border-slate-200'} z-30`}
     >
       <div className="mb-10 flex items-center justify-between px-6 mt-6">
         <div className="flex items-center space-x-3">
