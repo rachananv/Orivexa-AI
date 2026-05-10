@@ -95,7 +95,13 @@ const ChatInterface = ({ toggleSidebar }) => {
 
     if (isStaticEnv) {
       try {
-        const reply = await getGeminiResponse(currentInput);
+        // Build conversation history for a true ChatGPT experience
+        const history = messages.map(m => ({
+          role: m.type === 'user' ? 'user' : 'model',
+          parts: [{ text: m.text }]
+        }));
+
+        const reply = await getGeminiResponse(currentInput, history);
         
         // Typewriter effect for ChatGPT feel
         let currentText = "";

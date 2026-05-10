@@ -1,32 +1,24 @@
 // Using the key provided in previous conversation history for this project
 const API_KEY = "AIzaSyAVSG4sUoDMjWktouuy0t15N2OGc99w2YA";
 
-export const getGeminiResponse = async (prompt) => {
+export const getGeminiResponse = async (prompt, history = []) => {
   try {
-    // Using direct Fetch call for maximum compatibility across all browsers
-    const fullPrompt = `System Instruction: You are Orivexa AI Pro.
-    Strictly follow these rules:
-    1. Reply properly to greetings (e.g., "Hello! 😊 How can I help you today?").
-    2. Understand questions carefully.
-    3. Give direct, correct, and meaningful answers.
-    4. Provide detailed academic/technical explanations in simple language.
-    5. Be friendly, professional, and human-like.
-    6. Ask for clarification if unsure.
-    7. No broken sentences or irrelevant content.
-    8. Format with paragraphs and bullet points.
-    9. For coding: explain logic, give code, mention errors.
-    10. Respond naturally to casual questions.
-    11. Maintain context.
-    12. Don't say "I don't know" immediately.
-    13. Provide high-quality, intelligent responses like ChatGPT.
+    // Standard system instruction to keep the AI in character
+    const systemPrompt = "You are Orivexa AI Pro. Strictly follow these rules:\n1. Reply properly to greetings.\n2. Understand questions carefully.\n3. Give direct, correct, and meaningful answers.\n4. Provide detailed academic/technical explanations in simple language.\n5. Be friendly, professional, and human-like.\n6. Format with paragraphs and bullet points.\n7. For coding: explain logic, give code, mention errors.\n8. Maintain context using the provided history.";
 
-    User Question: ${prompt}`;
+    // Merge history with current prompt
+    const contents = [
+      { role: 'user', parts: [{ text: systemPrompt }] },
+      { role: 'model', parts: [{ text: "I understand perfectly. I will act as Orivexa AI Pro and follow all rules." }] },
+      ...history,
+      { role: 'user', parts: [{ text: prompt }] }
+    ];
 
     const response = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        contents: [{ parts: [{ text: fullPrompt }] }],
+        contents,
         generationConfig: { maxOutputTokens: 2048, temperature: 0.9 }
       })
     });
