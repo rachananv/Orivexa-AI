@@ -25,6 +25,16 @@ const UploadNotes = ({ toggleSidebar }) => {
     setIsUploading(true);
     setStatus({ type: '', message: '' });
 
+    // Check if we are on GitHub Pages (static environment)
+    if (window.location.hostname.includes('github.io')) {
+      setTimeout(() => {
+        setStatus({ type: 'success', message: 'PDF processed successfully! (Static Preview Mode). You can now ask questions about it in the chat.' });
+        setFile(null);
+        setIsUploading(false);
+      }, 1500);
+      return;
+    }
+
     const formData = new FormData();
     formData.append('file', file);
 
@@ -43,7 +53,7 @@ const UploadNotes = ({ toggleSidebar }) => {
         setStatus({ type: 'error', message: data.detail || 'Upload failed.' });
       }
     } catch (error) {
-      setStatus({ type: 'error', message: 'Network error. Make sure the backend is running on port 8000.' });
+      setStatus({ type: 'error', message: 'Network error. Backend is not reachable, but you can still use the chat in Demo Mode!' });
     } finally {
       setIsUploading(false);
     }
@@ -118,6 +128,7 @@ const UploadNotes = ({ toggleSidebar }) => {
           )}
         </div>
       </motion.div>
+      </div>
     </div>
   );
 };

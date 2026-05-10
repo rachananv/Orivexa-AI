@@ -72,6 +72,7 @@ const Settings = ({ toggleSidebar }) => {
           )}
         </div>
       </motion.div>
+      </div>
     </div>
   );
 };

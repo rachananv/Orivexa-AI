@@ -8,14 +8,30 @@ const Dashboard = ({ toggleSidebar }) => {
 
   useEffect(() => {
     const fetchDashboard = async () => {
+      // Check if we are on GitHub Pages (static environment)
+      if (window.location.hostname.includes('github.io')) {
+        setDashboardData({
+          documents_uploaded: 2,
+          recent_activity: [
+            { title: "Uploaded 'Physics_Notes.pdf'", time: "10:30 AM" },
+            { title: "Asked: 'What is entropy?'", time: "11:15 AM" }
+          ]
+        });
+        return;
+      }
+
       try {
         const response = await fetch(`${API_URL}/api/dashboard`);
         if (response.ok) {
           const data = await response.json();
           setDashboardData(data);
+        } else {
+           // Fallback for failed fetch
+           setDashboardData({ documents_uploaded: 0, recent_activity: [] });
         }
       } catch (e) {
         console.error("Failed to fetch dashboard data", e);
+        setDashboardData({ documents_uploaded: 1, recent_activity: [{title: "Demo Mode Active", time: "Now"}] });
       }
     };
     fetchDashboard();
@@ -98,6 +114,7 @@ const Dashboard = ({ toggleSidebar }) => {
           </div>
         </div>
       </motion.div>
+      </div>
     </div>
   );
 };

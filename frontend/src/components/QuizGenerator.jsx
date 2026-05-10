@@ -17,12 +17,38 @@ const QuizGenerator = ({ toggleSidebar }) => {
     setAnswers({});
     setQuiz([]);
 
+    // Check if we are on GitHub Pages (static environment)
+    if (window.location.hostname.includes('github.io')) {
+      setTimeout(() => {
+        const demoQuiz = [
+          {
+            question: "What is the primary focus of Orivexa AI?",
+            options: ["Gaming", "Academic Assistance", "Cooking", "Driving"],
+            answer: "Academic Assistance"
+          },
+          {
+            question: "Which file format is supported for note uploads?",
+            options: ["MP3", "JPG", "PDF", "EXE"],
+            answer: "PDF"
+          },
+          {
+            question: "Orivexa AI uses RAG. What does RAG stand for?",
+            options: ["Random Access Group", "Retrieval-Augmented Generation", "Red Alpha Green", "Remote Audio Gateway"],
+            answer: "Retrieval-Augmented Generation"
+          }
+        ];
+        setQuiz(demoQuiz);
+        setIsLoading(false);
+      }, 1500);
+      return;
+    }
+
     try {
       const response = await fetch(`${API_URL}/api/quiz`);
       const data = await response.json();
       
       if (!response.ok) {
-        setError(data.detail || 'Failed to generate quiz.');
+        setError(data.detail || 'Failed to generate quiz. Try uploading a PDF first!');
         setIsLoading(false);
         return;
       }
@@ -31,7 +57,16 @@ const QuizGenerator = ({ toggleSidebar }) => {
       const parsedQuiz = JSON.parse(data.quiz.replace(/```json/g, '').replace(/```/g, ''));
       setQuiz(parsedQuiz);
     } catch (err) {
-      setError('Network error or failed to parse quiz.');
+      setError('Backend is offline. Showing a demo quiz instead!');
+      // Show demo quiz as fallback
+      const demoQuiz = [
+        {
+          question: "What is the primary focus of Orivexa AI?",
+          options: ["Gaming", "Academic Assistance", "Cooking", "Driving"],
+          answer: "Academic Assistance"
+        }
+      ];
+      setQuiz(demoQuiz);
     } finally {
       setIsLoading(false);
     }
@@ -139,6 +174,7 @@ const QuizGenerator = ({ toggleSidebar }) => {
           </div>
         )}
       </motion.div>
+      </div>
     </div>
   );
 };

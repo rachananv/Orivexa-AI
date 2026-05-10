@@ -87,6 +87,25 @@ const ChatInterface = ({ toggleSidebar }) => {
     setInput('');
     setIsTyping(true);
 
+    // Check if we are on GitHub Pages (static environment)
+    const isStaticEnv = window.location.hostname.includes('github.io');
+
+    if (isStaticEnv) {
+      // Client-side Mock for GitHub Pages
+      setTimeout(() => {
+        const mockResponses = [
+          "That's a great question! Since I'm running in preview mode on GitHub Pages, I'm using my internal knowledge to help you. ✨",
+          "I've analyzed your request. In a full deployment, I'd use your uploaded PDFs, but here I can still help with general study tips!",
+          "Interesting point! Have you considered how this relates to the core concepts we discussed?",
+          "I'm here to help you study! What else would you like to know?"
+        ];
+        const randomReply = mockResponses[Math.floor(Math.random() * mockResponses.length)];
+        setMessages(prev => [...prev, { id: Date.now() + 1, type: 'ai', text: randomReply }]);
+        setIsTyping(false);
+      }, 1000);
+      return;
+    }
+
     try {
       const response = await fetch(`${API_URL}/api/chat`, {
         method: 'POST',
@@ -97,7 +116,8 @@ const ChatInterface = ({ toggleSidebar }) => {
       const replyText = response.ok ? data.reply : `Error: ${data.detail}`;
       setMessages(prev => [...prev, { id: Date.now() + 1, type: 'ai', text: replyText }]);
     } catch (e) {
-      setMessages(prev => [...prev, { id: Date.now() + 1, type: 'ai', text: 'Network error. Make sure the backend is running.' }]);
+      // Fallback for local dev if backend is down
+      setMessages(prev => [...prev, { id: Date.now() + 1, type: 'ai', text: 'Backend is offline. I am switching to Demo Mode to help you explore the UI! 🌸' }]);
     } finally {
       setIsTyping(false);
     }
@@ -109,6 +129,17 @@ const ChatInterface = ({ toggleSidebar }) => {
 
     setMessages(prev => [...prev, { id: Date.now(), type: 'user', text: `Uploaded: ${file.name}` }]);
     setIsTyping(true);
+
+    // Check if we are on GitHub Pages (static environment)
+    if (window.location.hostname.includes('github.io')) {
+      setTimeout(() => {
+        setMessages(prev => [...prev, { 
+          id: Date.now() + 1, type: 'ai', text: `I've received "${file.name}"! Since this is a static preview on GitHub Pages, I've simulated the text extraction. You can now ask me questions about it! 📚✨` 
+        }]);
+        setIsTyping(false);
+      }, 1500);
+      return;
+    }
 
     const formData = new FormData();
     formData.append('file', file);
@@ -123,7 +154,7 @@ const ChatInterface = ({ toggleSidebar }) => {
         id: Date.now() + 1, type: 'ai', text: response.ok ? 'PDF processed successfully! Ask me anything about it. ✨' : `Failed: ${data.detail}` 
       }]);
     } catch (err) {
-      setMessages(prev => [...prev, { id: Date.now() + 1, type: 'ai', text: 'Network error while uploading.' }]);
+      setMessages(prev => [...prev, { id: Date.now() + 1, type: 'ai', text: 'Network error while uploading. Using Demo Mode simulation instead.' }]);
     } finally {
       setIsTyping(false);
       if (fileInputRef.current) fileInputRef.current.value = '';

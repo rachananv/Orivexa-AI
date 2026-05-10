@@ -137,6 +137,7 @@ const VoiceAssistant = ({ toggleSidebar }) => {
           </p>
         </div>
       </motion.div>
+      </div>
     </div>
   );
 };

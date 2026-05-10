@@ -75,6 +75,7 @@ const SavedChats = ({ toggleSidebar }) => {
           </div>
         )}
       </motion.div>
+      </div>
     </div>
   );
 };
