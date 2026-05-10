@@ -14,6 +14,7 @@ import './App.css';
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [chatKey, setChatKey] = useState(0);
 
   // Simple study hours tracker
   useEffect(() => {
