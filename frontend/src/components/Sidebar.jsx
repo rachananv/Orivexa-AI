@@ -14,14 +14,12 @@ const Sidebar = ({ isDarkMode, toggleDarkMode, isOpen, setIsOpen }) => {
   ];
 
   return (
-    <motion.div 
-      initial={false}
-      animate={{ 
-        x: window.innerWidth >= 768 ? 0 : (isOpen ? 0 : -260),
-        width: window.innerWidth >= 768 ? 260 : (isOpen ? 260 : 0)
-      }}
-      transition={{ type: 'spring', damping: 20, stiffness: 100 }}
-      className={`fixed md:relative h-full flex flex-col border-r backdrop-blur-xl ${isDarkMode ? 'bg-slate-900/80 border-slate-700' : 'bg-white/80 border-slate-200'} z-30`}
+    <div 
+      className={`
+        ${isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
+        fixed md:relative w-64 h-full flex flex-col border-r transition-transform duration-300 ease-in-out z-30
+        ${isDarkMode ? 'bg-slate-900 border-slate-700' : 'bg-white border-slate-200'}
+      `}
     >
       <div className="mb-10 flex items-center justify-between px-6 mt-6">
         <div className="flex items-center space-x-3">
@@ -82,7 +80,7 @@ const Sidebar = ({ isDarkMode, toggleDarkMode, isOpen, setIsOpen }) => {
           </div>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 };
 

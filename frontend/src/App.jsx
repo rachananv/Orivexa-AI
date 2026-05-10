@@ -48,7 +48,7 @@ function App() {
                 setIsOpen={setIsSidebarOpen}
               />
               
-              <div className="flex-1 flex flex-col h-full relative z-10 overflow-hidden w-full">
+              <div className="flex-1 flex flex-col h-full relative z-10 overflow-hidden w-full min-w-0">
                 <Routes>
                   <Route path="/" element={<Navigate to="/app/chat" replace />} />
                   <Route path="/chat" element={<ChatInterface toggleSidebar={toggleSidebar} />} />
