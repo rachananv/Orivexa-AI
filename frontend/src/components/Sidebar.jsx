@@ -43,30 +43,24 @@ const Sidebar = ({ isDarkMode, toggleDarkMode, isOpen, setIsOpen, resetChat }) =
 
       <nav className="flex-1 px-4 space-y-2 mt-4 overflow-y-auto">
           {navItems.map((item, index) => (
-            <button
+            <NavLink
               key={index}
+              to={item.path}
               onClick={() => {
-                if (item.label === 'New Chat') {
-                  resetChat();
-                } else {
-                  setIsOpen(false);
-                }
-                navigate(item.path);
+                if (item.label === 'New Chat') resetChat();
+                setIsOpen(false);
               }}
-              className={`w-full flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 group ${
-                location.pathname === item.path 
-                  ? 'bg-gradient-to-r from-purple-600/20 to-pink-600/20 text-purple-400 border border-purple-500/20 shadow-[0_0_15px_rgba(168,85,247,0.1)]' 
+              className={({ isActive }) => `w-full flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 group ${
+                isActive 
+                  ? 'bg-gradient-to-r from-purple-600/20 to-pink-600/20 text-purple-400 border border-purple-500/20 shadow-[0_0_15px_rgba(168,85,247,0.1)] font-medium' 
                   : 'text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800/50 hover:text-purple-500 dark:hover:text-purple-400'
               }`}
             >
-              <div className={`${location.pathname === item.path ? 'text-purple-400' : 'group-hover:scale-110 transition-transform'}`}>
+              <div className="group-hover:scale-110 transition-transform">
                 {item.icon}
               </div>
               <span className="font-medium">{item.label}</span>
-              {location.pathname === item.path && (
-                <div className="ml-auto w-1.5 h-1.5 rounded-full bg-purple-500 shadow-[0_0_8px_rgba(168,85,247,0.6)]"></div>
-              )}
-            </button>
+            </NavLink>
           ))}
       </nav>
 
