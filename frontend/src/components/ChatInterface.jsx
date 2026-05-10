@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Send, Mic, Paperclip, Copy, Bookmark, Trash2, StopCircle, Menu } from 'lucide-react';
 import API_URL from '../config';
 import { getGeminiResponse } from '../coreAI';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 const ChatInterface = ({ toggleSidebar }) => {
   const userName = localStorage.getItem('orivexa_username') || 'bestie';
@@ -225,7 +227,15 @@ const ChatInterface = ({ toggleSidebar }) => {
                     ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-br-none' 
                     : 'bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 rounded-bl-none'
                 }`}>
-                  <p className="leading-relaxed whitespace-pre-wrap">{msg.text}</p>
+                  {msg.type === 'ai' ? (
+                    <div className="prose prose-sm dark:prose-invert max-w-none">
+                      <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                        {msg.text}
+                      </ReactMarkdown>
+                    </div>
+                  ) : (
+                    <p className="leading-relaxed whitespace-pre-wrap">{msg.text}</p>
+                  )}
                 </div>
                 {msg.type === 'ai' && (
                   <div className="flex items-center space-x-2 px-2 text-xs text-slate-400">

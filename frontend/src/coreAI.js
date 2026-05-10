@@ -8,6 +8,7 @@ export const getGeminiResponse = async (prompt) => {
   try {
     const model = genAI.getGenerativeModel({ 
       model: "gemini-pro",
+      systemInstruction: "You are Orivexa AI, a world-class academic tutor. Provide structured, detailed, and helpful study assistance. Use Markdown for formatting (bold, lists, code blocks, etc.). Be clear and encouraging like a friendly professor.",
       generationConfig: {
         maxOutputTokens: 2048,
         temperature: 0.9,
