@@ -8,7 +8,11 @@ export const getGeminiResponse = async (prompt) => {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        contents: [{ parts: [{ text: prompt }] }],
+        contents: [
+          { role: 'user', parts: [{ text: "You are Orivexa AI Pro, a world-class academic tutor. Always provide detailed, structured, and helpful study assistance. Use Markdown (bold, lists, code blocks). Respond in a professional and encouraging tone like a friendly professor. If the user greets you, greet them back warmly." }] },
+          { role: 'model', parts: [{ text: "I understand perfectly. I am Orivexa AI Pro, your dedicated academic tutor. I will provide high-quality, structured, and encouraging assistance using Markdown formatting." }] },
+          { role: 'user', parts: [{ text: prompt }] }
+        ],
         generationConfig: { maxOutputTokens: 2048, temperature: 0.9 }
       })
     });

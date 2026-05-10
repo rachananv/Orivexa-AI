@@ -96,7 +96,31 @@ const ChatInterface = ({ toggleSidebar }) => {
     if (isStaticEnv) {
       try {
         const reply = await getGeminiResponse(currentInput);
-        setMessages(prev => [...prev, { id: Date.now() + 1, type: 'ai', text: reply }]);
+        
+        // Typewriter effect for ChatGPT feel
+        let currentText = "";
+        const words = reply.split(" ");
+        setIsTyping(true);
+        
+        for (let i = 0; i < words.length; i++) {
+          currentText += (i === 0 ? "" : " ") + words[i];
+          const tempText = currentText;
+          setMessages(prev => {
+            const last = prev[prev.length - 1];
+            if (last && last.type === 'ai' && last.isStreaming) {
+              return [...prev.slice(0, -1), { ...last, text: tempText }];
+            } else {
+              return [...prev, { id: Date.now() + 1, type: 'ai', text: tempText, isStreaming: true }];
+            }
+          });
+          await new Promise(r => setTimeout(r, 30));
+        }
+        
+        // Finalize message
+        setMessages(prev => {
+          const last = prev[prev.length - 1];
+          return [...prev.slice(0, -1), { ...last, isStreaming: false }];
+        });
       } catch (e) {
         setMessages(prev => [...prev, { id: Date.now() + 1, type: 'ai', text: "I'm experiencing high traffic. Please try again! 🌸" }]);
       } finally {
