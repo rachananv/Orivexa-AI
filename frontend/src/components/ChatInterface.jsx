@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Send, Mic, Paperclip, Copy, Bookmark, Trash2, StopCircle, Menu } from 'lucide-react';
 import API_URL from '../config';
-import { getGeminiResponse } from '../geminiApi';
+import { getGeminiResponse } from '../coreAI';
 
 const ChatInterface = ({ toggleSidebar }) => {
   const userName = localStorage.getItem('orivexa_username') || 'bestie';
@@ -183,6 +183,12 @@ const ChatInterface = ({ toggleSidebar }) => {
           >
             <Menu size={24} />
           </button>
+          <div className="flex flex-col">
+            <h1 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400 flex items-center">
+              Orivexa AI <span className="ml-2 text-[10px] px-1.5 py-0.5 rounded-full bg-purple-500/20 text-purple-400 border border-purple-500/20 uppercase tracking-widest font-bold">v2.0</span>
+            </h1>
+            <p className="text-xs text-slate-500 font-medium hidden sm:block">Advanced Study Assistant</p>
+          </div>
           <span className="relative flex h-3 w-3">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
             <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
