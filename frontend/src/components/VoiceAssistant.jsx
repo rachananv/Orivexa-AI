@@ -34,6 +34,16 @@ const VoiceAssistant = ({ toggleSidebar }) => {
         setIsListening(false);
         setAiResponse('Thinking...');
         
+        // Check if we are on GitHub Pages (static environment)
+        if (window.location.hostname.includes('github.io')) {
+          setTimeout(() => {
+            const replyText = "I'm your voice assistant! In this static preview, I'm simulating my responses. On a full setup, I'd answer you using your notes! ✨";
+            setAiResponse(replyText);
+            speakText(replyText);
+          }, 1000);
+          return;
+        }
+
         try {
           const response = await fetch(`${API_URL}/api/chat`, {
             method: 'POST',
@@ -45,7 +55,8 @@ const VoiceAssistant = ({ toggleSidebar }) => {
           setAiResponse(replyText);
           speakText(replyText);
         } catch (e) {
-          setAiResponse('Network error while fetching response.');
+          setAiResponse('Backend is offline, but I can still chat in Demo Mode! 🌸');
+          speakText('Backend is offline, but I can still chat in Demo Mode!');
         }
       };
       
