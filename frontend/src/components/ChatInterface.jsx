@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Send, Mic, Paperclip, Copy, Bookmark, Trash2, StopCircle, Menu } from 'lucide-react';
 import API_URL from '../config';
+import { getGeminiResponse } from '../geminiApi';
 
 const ChatInterface = ({ toggleSidebar }) => {
   const userName = localStorage.getItem('orivexa_username') || 'bestie';
@@ -87,19 +88,18 @@ const ChatInterface = ({ toggleSidebar }) => {
     setInput('');
     setIsTyping(true);
 
-    // Check if we are on GitHub Pages (static environment)
+    // Try to use Backend first, if fails or on GitHub Pages, use Gemini
     const isStaticEnv = window.location.hostname.includes('github.io');
 
     if (isStaticEnv) {
-      // Professional AI responses for static environment
-      setTimeout(() => {
-        let replyText = "I've processed your request. Based on my current analysis, it's important to focus on the key principles of this topic. How can I elaborate further on this for you? ✨";
-        if (currentInput.toLowerCase().includes("hello") || currentInput.toLowerCase().includes("hi")) {
-          replyText = `Hello! I'm Orivexa AI. I'm ready to help you with your studies. What are we working on today? 🌸`;
-        }
-        setMessages(prev => [...prev, { id: Date.now() + 1, type: 'ai', text: replyText }]);
+      try {
+        const reply = await getGeminiResponse(currentInput);
+        setMessages(prev => [...prev, { id: Date.now() + 1, type: 'ai', text: reply }]);
+      } catch (e) {
+        setMessages(prev => [...prev, { id: Date.now() + 1, type: 'ai', text: "I'm experiencing high traffic. Please try again! 🌸" }]);
+      } finally {
         setIsTyping(false);
-      }, 1000);
+      }
       return;
     }
 
@@ -110,14 +110,18 @@ const ChatInterface = ({ toggleSidebar }) => {
         body: JSON.stringify({ message: currentInput, session_id: 'default' })
       });
       const data = await response.json();
-      const replyText = response.ok ? data.reply : `I encountered a processing error. Please try rephrasing your question!`;
-      setMessages(prev => [...prev, { id: Date.now() + 1, type: 'ai', text: replyText }]);
+      
+      if (response.ok) {
+        setMessages(prev => [...prev, { id: Date.now() + 1, type: 'ai', text: data.reply }]);
+      } else {
+        // Fallback to Gemini if backend returns error
+        const reply = await getGeminiResponse(currentInput);
+        setMessages(prev => [...prev, { id: Date.now() + 1, type: 'ai', text: reply }]);
+      }
     } catch (e) {
-      // Seamless fallback if backend is down
-      setTimeout(() => {
-        setMessages(prev => [...prev, { id: Date.now() + 1, type: 'ai', text: "I'm currently optimizing my connection. In the meantime, I can still help you with general knowledge! What's on your mind?" }]);
-        setIsTyping(false);
-      }, 800);
+      // Fallback to Gemini if backend is completely offline
+      const reply = await getGeminiResponse(currentInput);
+      setMessages(prev => [...prev, { id: Date.now() + 1, type: 'ai', text: reply }]);
     } finally {
       setIsTyping(false);
     }
